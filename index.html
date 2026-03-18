@@ -117,18 +117,30 @@
         </div>
 
         <!------------------------------ Formulaire de la modale -------------------------------->
-        <div class="modal-view modal-form-view" hidden>
-          <!-- flèche retour -->
-          <button class="modal-back" aria-label="Retour">
-            <i class="fa-solid fa-arrow-left"></i>
-          </button>
+        <button class="modal-back" aria-label="Retour">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
 
+        <div class="modal-view modal-form-view" hidden>
           <h3>Ajout photo</h3>
 
           <form class="modal-form">
             <!-- Zone upload -->
             <div class="modal-upload">
-              <input type="file" name="image" accept="image/*" required />
+              <i class="fa-regular fa-image upload-icon"></i>
+
+              <label for="image-upload" class="upload-button"
+                >+ Ajouter photo</label
+              >
+              <input
+                id="image-upload"
+                type="file"
+                name="image"
+                accept="image/*"
+                required
+              />
+
+              <p class="upload-info">jpg, png – 4 Mo max</p>
             </div>
 
             <!-- Titre -->
@@ -138,10 +150,9 @@
             <!-- Catégorie -->
             <label for="category">Catégorie</label>
             <select id="category" name="category" required></select>
-
-            <!-- Bouton valider -->
-            <button type="submit" class="modal-submit">Valider</button>
           </form>
+          <!-- Bouton valider -->
+          <button type="submit" class="modal-submit">Valider</button>
         </div>
       </div>
     </div>

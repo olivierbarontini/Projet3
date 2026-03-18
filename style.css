@@ -458,6 +458,10 @@ footer {
   border-bottom: 1px solid #ccc;
 }
 
+.modal-back {
+  display: none;
+}
+
 .modal-wrapper {
   position: relative;
   background: #fffef8;
@@ -531,4 +535,146 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/*------------ MODALE.2 ------  */
+
+.modal-form-view {
+  position: relative;
+  padding: 40px 60px;
+}
+
+.modal-form-view h3 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 30px;
+}
+
+/* Bouton retour (flèche) */
+.modal-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 22px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-form label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.modal-form input[type="text"],
+.modal-form select {
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+.modal-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e8f0f8;
+  border-radius: 5px;
+  height: 170px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.modal-upload input[type="file"] {
+  font-size: 14px;
+}
+
+.modal-submit {
+  display: block;
+  margin: 0 auto; /* centre horizontalement */
+  margin-top: 20px;
+
+  width: 50%;
+  height: 40px;
+  border-radius: 20px;
+  border: none;
+  background-color: #1d6154;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.modal-submit:hover {
+  opacity: 1;
+}
+
+/* Cadre global du formulaire (comme la galerie) */
+.modal-form-view {
+  position: relative;
+  padding: 40px 60px;
+}
+
+/* Conteneur qui englobe upload + inputs + séparation */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 70%;
+  margin: 0 auto;
+  padding-bottom: 40px;
+  margin-bottom: 45px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* ===========================
+   ZONE UPLOAD – STYLE OC
+   =========================== */
+
+.modal-upload {
+  background-color: #e8f0f8; /* ton bleu-gris */
+  border-radius: 5px;
+  height: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+}
+
+/* Icône image grise */
+.upload-icon {
+  font-size: 60px;
+  color: #b9c5d9;
+}
+
+/* Bouton + Ajouter photo */
+.upload-button {
+  background-color: #cbd6e2;
+  color: #306685;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Texte formats */
+.upload-info {
+  font-size: 10px;
+  color: #6a6a6a;
+}
+
+/* On cache l’input file natif */
+#image-upload {
+  display: none;
 }

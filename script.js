@@ -180,73 +180,112 @@ if (localStorage.getItem("token")) {
 }
 
 // -------------------------------------------------------------
-// 6. MODALE : ouverture / fermeture / navigation interne /
+// 6. MODALE : ouverture / fermeture / navigation interne
 // -------------------------------------------------------------
 
 const modal = document.getElementById("modal");
 const modalOverlay = modal.querySelector(".modal-overlay");
 const modalClose = modal.querySelector(".modal-close");
 const editButton = document.querySelector(".edit-button");
+
 const galleryView = modal.querySelector(".modal-gallery-view");
 const formView = modal.querySelector(".modal-form-view");
+
 const addPhotoButton = modal.querySelector(".modal-add-photo");
 const backButton = modal.querySelector(".modal-back");
 
-// Ouvrir la modale
+// Par défaut, la flèche NE DOIT PAS apparaître
+backButton.style.display = "none";
+
+// -------------------------------------------------------------
+// OUVERTURE DE LA MODALE
+// -------------------------------------------------------------
 async function openModal() {
   modal.classList.add("is-open");
+
+  // Accessibilité : la modale devient active
+  modal.removeAttribute("inert");
   modal.setAttribute("aria-hidden", "false");
 
+  // On recharge les travaux pour la galerie interne
   const works = await fetchWorks();
   displayModalGallery(works);
 
+  // On affiche la vue galerie par défaut
   showGalleryView();
 }
-// bouton pour ouvrir la modale
+
+// Bouton "modifier" pour ouvrir la modale
 editButton.addEventListener("click", openModal);
 
-// Fermer la modale
+// -------------------------------------------------------------
+// FERMETURE DE LA MODALE
+// -------------------------------------------------------------
 function closeModal() {
+  document.activeElement.blur(); // Retire le focus de l'élément actif pour éviter les problèmes d'accessibilité
   modal.classList.remove("is-open");
+
+  // Accessibilité : la modale devient inactive
+  modal.setAttribute("inert", "");
   modal.setAttribute("aria-hidden", "true");
 }
-// bouton pour fermer la modale
+
+// Bouton croix
 modalClose.addEventListener("click", closeModal);
 
-// Afficher la galerie dans la modale
+// -------------------------------------------------------------
+// VUE 1 : GALERIE
+// -------------------------------------------------------------
 function showGalleryView() {
   galleryView.hidden = false;
   formView.hidden = true;
+
+  // La flèche doit disparaître dans la vue galerie
+  backButton.style.display = "none";
 }
 
-// Afficher le formulaire dans la modale
+// -------------------------------------------------------------
+// VUE 2 : FORMULAIRE D'AJOUT
+// -------------------------------------------------------------
 function showFormView() {
   galleryView.hidden = true;
   formView.hidden = false;
+
+  // La flèche apparaît uniquement dans cette vue
+  backButton.style.display = "block";
 }
 
-// pour fermer la modale en cliquant sur la page d'accueil
+// -------------------------------------------------------------
+// FERMETURE EN CLIQUANT SUR L’OVERLAY
+// -------------------------------------------------------------
 modalOverlay.addEventListener("click", (event) => {
   if (event.target.dataset.close === "true") {
     closeModal();
   }
 });
 
-// pour fermer la modale avec la touche Échap
+// -------------------------------------------------------------
+// FERMETURE AVEC LA TOUCHE ÉCHAP
+// -------------------------------------------------------------
 window.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && modal.classList.contains("is-open")) {
     closeModal();
   }
 });
 
-// navigation interne
+// -------------------------------------------------------------
+// NAVIGATION INTERNE ENTRE LES 2 VUES
+// -------------------------------------------------------------
+
+// Bouton "Ajouter une photo" → ouvre la vue formulaire
 addPhotoButton.addEventListener("click", showFormView);
+
+// Bouton flèche retour → revient à la galerie
 backButton.addEventListener("click", showGalleryView);
 
 // -------------------------------------------------------------
 // 6. INITIALISATION DE LA PAGE
 // -------------------------------------------------------------
-
 async function init() {
   const works = await fetchWorks();
   displayGallery(works);
