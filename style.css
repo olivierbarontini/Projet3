@@ -599,22 +599,20 @@ footer {
 
 .modal-submit {
   display: block;
-  margin: 0 auto; /* centre horizontalement */
+  margin: 0 auto;
   margin-top: 20px;
-
   width: 50%;
   height: 40px;
   border-radius: 20px;
   border: none;
-  background-color: #1d6154;
+  background-color: #a7a7a7;
   color: white;
   font-weight: 600;
   cursor: pointer;
-  opacity: 0.7;
 }
 
 .modal-submit:hover {
-  opacity: 1;
+  background-color: #1d6154;
 }
 
 /* Cadre global du formulaire (comme la galerie) */

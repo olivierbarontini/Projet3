@@ -12,9 +12,8 @@ async function fetchWorks() {
   }
 }
 
-// -------------------------------------------------------------
-//  DELETE D'UN WORK VIA L'API
-// -------------------------------------------------------------
+//  DELETE D'UN WORK VIA L'API  //
+
 async function deleteWork(id) {
   const token = localStorage.getItem("token");
 
@@ -46,7 +45,7 @@ async function deleteWork(id) {
 // 2. AFFICHAGE DE LA GALERIE
 // -------------------------------------------------------------
 
-export function displayGallery(works) {
+function displayGallery(works) {
   const gallery = document.querySelector(".gallery");
   gallery.innerHTML = "";
 
@@ -282,6 +281,121 @@ addPhotoButton.addEventListener("click", showFormView);
 
 // Bouton flèche retour → revient à la galerie
 backButton.addEventListener("click", showGalleryView);
+
+// -------------------------------------------------------------
+// 7. AJOUT D’UNE PHOTO DANS LA MODALE
+// -------------------------------------------------------------
+
+// 1. Sélecteurs HTML
+const imageInput = document.querySelector("#image-upload");
+const titleInput = document.querySelector("#title");
+const categorySelect = document.querySelector("#category");
+
+const imagePreview = document.querySelector(".image-preview");
+const uploadIcon = document.querySelector(".upload-icon");
+const uploadButton = document.querySelector(".upload-button");
+const uploadInfo = document.querySelector(".upload-info");
+
+const submitButton = document.querySelector(".modal-submit");
+
+// 2. Variables internes
+let selectedImageFile = null;
+let selectedTitle = "";
+let selectedCategory = null;
+
+// 3. Preview image
+imageInput.addEventListener("change", (event) => {
+  selectedImageFile = event.target.files[0];
+
+  if (selectedImageFile) {
+    imagePreview.src = URL.createObjectURL(selectedImageFile);
+    imagePreview.style.display = "block";
+
+    uploadIcon.style.display = "none";
+    uploadButton.style.display = "none";
+    uploadInfo.style.display = "none";
+  }
+});
+
+// 4. Récupération du titre
+titleInput.addEventListener("input", (event) => {
+  selectedTitle = event.target.value;
+});
+
+// 5. Récupération catégorie
+categorySelect.addEventListener("change", (event) => {
+  selectedCategory = event.target.value;
+});
+
+// 6. Chargement des catégories
+async function loadCategoriesInForm() {
+  const response = await fetch("http://localhost:5678/api/categories");
+  const categories = await response.json();
+
+  categorySelect.innerHTML = "";
+
+  categories.forEach((cat) => {
+    const option = document.createElement("option");
+    option.value = cat.id;
+    option.textContent = cat.name;
+    categorySelect.appendChild(option);
+  });
+}
+
+loadCategoriesInForm();
+
+// 7. Envoi du formulaire
+submitButton.addEventListener("click", async () => {
+  if (!selectedImageFile || !selectedTitle || !selectedCategory) {
+    alert("Veuillez remplir tous les champs.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("image", selectedImageFile);
+  formData.append("title", selectedTitle);
+  formData.append("category", selectedCategory);
+
+  const token = localStorage.getItem("token");
+
+  const response = await fetch("http://localhost:5678/api/works", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    alert("Erreur lors de l’envoi du formulaire.");
+    return;
+  }
+
+  const works = await fetchWorks();
+  displayGallery(works);
+  displayModalGallery(works);
+
+  resetForm();
+  showGalleryView();
+});
+
+// 8. Reset du formulaire
+function resetForm() {
+  selectedImageFile = null;
+  selectedTitle = "";
+  selectedCategory = null;
+
+  imageInput.value = "";
+  titleInput.value = "";
+  categorySelect.value = "";
+
+  imagePreview.src = "";
+  imagePreview.style.display = "none";
+
+  uploadIcon.style.display = "block";
+  uploadButton.style.display = "block";
+  uploadInfo.style.display = "block";
+}
 
 // -------------------------------------------------------------
 // 6. INITIALISATION DE LA PAGE
