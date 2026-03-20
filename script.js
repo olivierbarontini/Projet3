@@ -301,7 +301,6 @@ const submitButton = document.querySelector(".modal-submit");
 // 2. Variables internes
 let selectedImageFile = null;
 let selectedTitle = "";
-let selectedCategory = null;
 
 // 3. Preview image
 imageInput.addEventListener("change", (event) => {
@@ -322,11 +321,6 @@ titleInput.addEventListener("input", (event) => {
   selectedTitle = event.target.value;
 });
 
-// 5. Récupération catégorie
-categorySelect.addEventListener("change", (event) => {
-  selectedCategory = event.target.value;
-});
-
 // 6. Chargement des catégories
 async function loadCategoriesInForm() {
   const response = await fetch("http://localhost:5678/api/categories");
@@ -334,6 +328,15 @@ async function loadCategoriesInForm() {
 
   categorySelect.innerHTML = "";
 
+  // Ajout de l'option vide par défaut
+  const emptyOption = document.createElement("option");
+  emptyOption.value = "";
+  emptyOption.textContent = "Choisissez une catégorie";
+  emptyOption.disabled = true;
+  emptyOption.selected = true;
+  categorySelect.appendChild(emptyOption);
+
+  // Ajout des catégories
   categories.forEach((cat) => {
     const option = document.createElement("option");
     option.value = cat.id;
@@ -341,12 +344,13 @@ async function loadCategoriesInForm() {
     categorySelect.appendChild(option);
   });
 }
-
 loadCategoriesInForm();
 
 // 7. Envoi du formulaire
 submitButton.addEventListener("click", async () => {
-  if (!selectedImageFile || !selectedTitle || !selectedCategory) {
+  const categoryValue = categorySelect.value;
+
+  if (!selectedImageFile || !selectedTitle || categoryValue === "") {
     alert("Veuillez remplir tous les champs.");
     return;
   }
@@ -354,7 +358,7 @@ submitButton.addEventListener("click", async () => {
   const formData = new FormData();
   formData.append("image", selectedImageFile);
   formData.append("title", selectedTitle);
-  formData.append("category", selectedCategory);
+  formData.append("category", categoryValue);
 
   const token = localStorage.getItem("token");
 
@@ -381,14 +385,16 @@ submitButton.addEventListener("click", async () => {
 
 // 8. Reset du formulaire
 function resetForm() {
+  // Réinitialisation des fichiers et valeurs
   selectedImageFile = null;
-  selectedTitle = "";
-  selectedCategory = null;
 
   imageInput.value = "";
   titleInput.value = "";
-  categorySelect.value = "";
 
+  // Remet l’option vide comme sélectionnée
+  categorySelect.selectedIndex = 0;
+
+  // Reset de l’aperçu image
   imagePreview.src = "";
   imagePreview.style.display = "none";
 
